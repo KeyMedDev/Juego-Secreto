@@ -1,0 +1,87 @@
+//Variables
+let numeroSecreto = 0;
+let intentos = 0;
+const maxIntentos = 4;
+const arrayMax = 10;
+let listaNumeros = [];
+
+//funcion relaod
+function reload(){
+    location.reload();
+}
+
+//funcion Numero aleatorio
+function generarNumero(){
+    let numeroGenerado = Math.floor(Math.random()*arrayMax)+1;
+    if (listaNumeros.length == arrayMax){
+        reload();
+    } else {
+        if(listaNumeros.includes(numeroGenerado)){
+            return generarNumero(); 
+        } else{
+            listaNumeros.push(numeroGenerado);
+            return numeroGenerado;
+        }
+    }
+}
+
+//funcion para HTML
+function asignarTexto(elemento, texto) {
+    const elementohmtl = document.querySelector(elemento);
+    elementohmtl.innerHTML = texto;
+    return;
+}
+//textos
+asignarTexto('h1', 'Juego del numero Secreto!');
+asignarTexto('p', 'Indica un numero entre 1 al 10');
+
+//funcion para limpiar el input
+function clean(){
+    return document.getElementById('input').value = '';
+}
+
+//funcion Inicial
+function condicionesIniciales() {
+    asignarTexto('p', 'Indica un numero entre 1 al 10');
+    asignarTexto('h1', 'Juego del numero Secreto!');
+    numeroSecreto = generarNumero();
+    intentos = 1;
+    console.log(numeroSecreto);
+}
+
+//Funcion reiniciar
+function reiniciarGame() {
+    clean();
+    condicionesIniciales();
+    document.getElementById('intento').removeAttribute('disabled');
+    document.getElementById('reiniciar').setAttribute('disabled','true');
+    return;
+}
+
+//Funcion habilitacion de botones
+function manejoBotones(){
+    document.getElementById('reiniciar').removeAttribute('disabled');
+    document.getElementById('intento').setAttribute('disabled','true');
+}
+
+//Funcion Boton
+function intentoUsuario(){
+    let numeroUsuario = parseInt(document.getElementById('input').value);
+         if (numeroUsuario === numeroSecreto){
+            asignarTexto('p', `Acertaste, el numero es: ${numeroUsuario}. Lo hiciste al ${intentos} ${intentos == 1 ? 'Intento' : 'Intentos'}`);
+            manejoBotones();
+        } else {
+          if (numeroUsuario > numeroSecreto) {
+                asignarTexto('p', 'El número secreto es menor');
+            } else {
+                asignarTexto('p', 'El número secreto es mayor');
+            }
+        } 
+        intentos++;
+        clean();
+        if (intentos > maxIntentos){
+            asignarTexto('p', `Llegastes al limite de 3 intentos`);
+            manejoBotones();
+        } 
+ }
+ condicionesIniciales();
